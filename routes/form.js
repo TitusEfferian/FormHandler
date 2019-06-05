@@ -24,10 +24,10 @@ router.post('/', function (req, res) {
     const date = req.body.Tanggal;
     const id_mesin = req.body.ID_Mesin;
     const id_lot = req.body.ID_Lot;
-    const plannedStop = req.body.Planned_Stop;
-    const unplannedStop = req.body.Unplanned_Stop;
-    const processedAmount = req.body.Processed_Amount;
-    const defectAmount = req.body.Defect_Amount;
+    const plannedStop = parseInt(req.body.Planned_Stop);
+    const unplannedStop = parseInt(req.body.Unplanned_Stop);
+    const processedAmount = parseFloat(req.body.Processed_Amount);
+    const defectAmount = parseFloat(req.body.Defect_Amount);
 
     var connection = mysql.createConnection({
         host: 'localhost',
