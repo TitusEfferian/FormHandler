@@ -20,7 +20,7 @@ router.get('/', function (req, res, next) {
     connection.end()
 });
 
-router.post('/',function(req,res){
+router.post('/', function (req, res) {
     const date = req.body.Tanggal;
     const id_mesin = req.body.ID_Mesin;
     const id_lot = req.body.ID_Lot;
@@ -29,18 +29,28 @@ router.post('/',function(req,res){
     const processedAmount = req.body.Processed_Amount;
     const defectAmount = req.body.Defect_Amount;
 
-    res.send({
-        success:true,
-        data:{
-            date,
-            id_mesin,
-            id_lot,
-            plannedStop,
-            unplannedStop,
-            processedAmount,
-            defectAmount
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        port: 3306,
+        // password: 'admin',
+        user: 'root',
+        database: 'oee',
+    });
+
+    connection.query('INSERT INTO TBINPUTDATA(Tanggal,ID_Mesin,ID_Lot,Planned_Stop,Unplanned_Stop,Processed_Amount,Defect_Amount)VALUES (' + date + ',' + id_mesin + ',' + id_lot + ',' + plannedStop + ',' + unplannedStop + ',' + processedAmount + ',' + defectAmount + ');', function (error, results, fields) {
+        if(error){
+            res.send({
+                success:false,
+                error
+            })
         }
-    })
+        res.send({
+            success: true,
+            data: results
+        })
+    });
+
+    connection.end()
 })
 
 module.exports = router;
