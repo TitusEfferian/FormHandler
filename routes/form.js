@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
     let data;
     connection.connect();
 
-    connection.query('select * from dbmesin', function (error, results, fields) {
+    connection.query('select * from tbmesin', function (error, results, fields) {
         if (error) throw error;
         data=results
     });
