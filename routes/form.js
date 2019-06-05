@@ -37,7 +37,7 @@ router.post('/', function (req, res) {
         database: 'oee',
     });
 
-    connection.query('INSERT INTO TBINPUTDATA(Tanggal,ID_Mesin,ID_Lot,Planned_Stop,Unplanned_Stop,Processed_Amount,Defect_Amount)VALUES (' + date + ',' + id_mesin + ',' + id_lot + ',' + plannedStop + ',' + unplannedStop + ',' + processedAmount + ',' + defectAmount + ');', function (error, results, fields) {
+    connection.query('INSERT INTO TBINPUTDATA(Tanggal,ID_Mesin,ID_Lot,Planned_Stop,Unplanned_Stop,Processed_Amount,Defect_Amount)VALUES ("' + date + '","' + id_mesin + '","' + id_lot + '",' + plannedStop + ',' + unplannedStop + ',' + processedAmount + ',' + defectAmount + ');', function (error, results, fields) {
         if(error){
             res.send({
                 success:false,
