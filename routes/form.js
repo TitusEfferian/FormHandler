@@ -20,4 +20,27 @@ router.get('/', function (req, res, next) {
     connection.end()
 });
 
+router.post('/',function(req,res){
+    const date = req.body.tanggal;
+    const id_mesin = req.body.ID_Mesin;
+    const id_lot = req.body.ID_Lot;
+    const plannedStop = req.body.Planned_Stop;
+    const unplannedStop = req.body.Unplanned_Stop;
+    const processedAmount = req.body.Processed_Amount;
+    const defectAmount = req.body.Defect_Amount;
+
+    res.send({
+        success:true,
+        data:{
+            date,
+            id_mesin,
+            id_lot,
+            plannedStop,
+            unplannedStop,
+            processedAmount,
+            defectAmount
+        }
+    })
+})
+
 module.exports = router;
