@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
         if (error) throw error;
         res.send({
             success: true,
-            data:data
+            data:results
         })
     });
 
