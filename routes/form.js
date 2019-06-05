@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/',function(req,res){
-    const date = req.body.tanggal;
+    const date = req.body.Tanggal;
     const id_mesin = req.body.ID_Mesin;
     const id_lot = req.body.ID_Lot;
     const plannedStop = req.body.Planned_Stop;
