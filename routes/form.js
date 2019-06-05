@@ -11,20 +11,17 @@ var connection = mysql.createConnection({
 });
 
 router.get('/', function (req, res, next) {
-    let data;
     connection.connect();
 
     connection.query('select * from tbmesin', function (error, results, fields) {
         if (error) throw error;
-        data=results
+        res.send({
+            success: true,
+            data:data
+        })
     });
 
-    connection.end();
-
-    res.send({
-        success: true,
-        data:data
-    })
+    connection.end();   
 });
 
 module.exports = router;
