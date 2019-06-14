@@ -11,21 +11,21 @@ router.get('/', function (req, res, next) {
         database: 'oee',
     });
     connection.query(`SELECT
-        tbinputdata.Tanggal, tbinputdata.ID_Mesin,
-        tbmesin.Jenis_Mesin, tbmesin.Nomor_Mesin,
-        tbmaterial.Nama_Material, tbmaterial.NE,
-        tbmesin.Ideal_CT, tbmesin.Delivery,
-        tbinputdata.ID_Lot, tbinputdata.Planned_Stop, tbinputdata.Unplanned_Stop, tbinputdata.Processed_Amount, tbinputdata.Defect_Amount,
-        (1440-Planned_Stop) AS Loading_Time,
-        ((1440-Planned_Stop)-Unplanned_Stop) AS Operation_Time,
-        ROUND((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)),4) AS AvailabilityRate,
-        ROUND(((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)),4) AS PerformanceRate,
-        ROUND(((Processed_Amount-Defect_Amount)/Processed_Amount),4) AS QualityRate,
-        ROUND(((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)) * ((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)) * ((Processed_Amount-Defect_Amount)/Processed_Amount)),4) AS OEERate
-        
-        FROM tbinputdata, tbmesin, tbmaterial
-        
-        WHERE tbinputdata.ID_Mesin=tbmesin.ID_Mesin AND tbinputdata.ID_Lot=tbmaterial.ID_Lot`, function (error, results, fields) {
+    tbinputdata.Tanggal, tbinputdata.ID_Mesin,
+    tbmesin.Jenis_Mesin, tbmesin.Nomor_Mesin,
+    tbmaterial.Nama_Material, tbmaterial.NE,
+    tbmesin.Ideal_CT, tbmesin.Delivery,
+    tbinputdata.ID_Lot, tbinputdata.Planned_Stop, tbinputdata.Unplanned_Stop, tbinputdata.Processed_Amount, tbinputdata.Defect_Amount,
+    (1440-Planned_Stop) AS Loading_Time,
+    ((1440-Planned_Stop)-Unplanned_Stop) AS Operation_Time,
+    ROUND((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)),4) AS AvailabilityRate,
+    ROUND(((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)),4) AS PerformanceRate,
+    ROUND(((Processed_Amount-Defect_Amount)/Processed_Amount),4) AS QualityRate,
+    ROUND(((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)) * ((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)) * ((Processed_Amount-Defect_Amount)/Processed_Amount)),4) AS OEERate
+    
+    FROM tbinputdata, tbmesin, tbmaterial
+    
+    WHERE tbinputdata.ID_Mesin=tbmesin.ID_Mesin AND tbinputdata.ID_Lot=tbmaterial.ID_Lot AND Jenis_Mesin="Carding" AND (Tanggal BETWEEN '2018-03-01' AND '2018-03-31');`, function (error, results, fields) {
             if (error) {
                 res.send({
                     success: false,
