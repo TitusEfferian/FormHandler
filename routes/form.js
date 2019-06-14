@@ -16,16 +16,20 @@ router.get('/', function (req, res, next) {
     tbmaterial.Nama_Material, tbmaterial.NE,
     tbmesin.Ideal_CT, tbmesin.Delivery,
     tbinputdata.ID_Lot, tbinputdata.Planned_Stop, tbinputdata.Unplanned_Stop, tbinputdata.Processed_Amount, tbinputdata.Defect_Amount,
+    
     (1440-Planned_Stop) AS Loading_Time,
     ((1440-Planned_Stop)-Unplanned_Stop) AS Operation_Time,
-    ROUND((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)),4) AS AvailabilityRate,
-    ROUND(((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)),4) AS PerformanceRate,
-    ROUND(((Processed_Amount-Defect_Amount)/Processed_Amount),4) AS QualityRate,
-    ROUND(((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)) * ((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)) * ((Processed_Amount-Defect_Amount)/Processed_Amount)),4) AS OEERate
+    
+    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)),4)) AS AvailabilityRate,
+    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND(((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)),4)) AS PerformanceRate,
+    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND(((Processed_Amount-Defect_Amount)/Processed_Amount),4)) AS QualityRate,
+    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND(((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)) * ((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)) * ((Processed_Amount-Defect_Amount)/Processed_Amount)),4)) AS OEERate
     
     FROM tbinputdata, tbmesin, tbmaterial
     
-    WHERE tbinputdata.ID_Mesin=tbmesin.ID_Mesin AND tbinputdata.ID_Lot=tbmaterial.ID_Lot AND Jenis_Mesin="Carding" AND (Tanggal BETWEEN '2018-03-01' AND '2018-03-31');`, function (error, results, fields) {
+    WHERE tbinputdata.ID_Mesin=tbmesin.ID_Mesin AND tbinputdata.ID_Lot=tbmaterial.ID_Lot AND Jenis_Mesin="Speed Frame" AND (Tanggal BETWEEN '2018-03-01' AND '2018-03-31')
+    
+    ORDER BY ID_Mesin ASC, Tanggal ASC;`, function (error, results, fields) {
             if (error) {
                 res.send({
                     success: false,
