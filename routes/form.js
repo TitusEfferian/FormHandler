@@ -10,6 +10,10 @@ router.get('/', function (req, res, next) {
         user: 'root',
         database: 'oee',
     });
+
+    const firstDate = req.query.firstDate;
+    const lastDate = req.query.lastDate;
+    const machineType = req.query.machineType;
     connection.query(`SELECT
     tbinputdata.Tanggal, tbinputdata.ID_Mesin,
     tbmesin.Jenis_Mesin, tbmesin.Nomor_Mesin,
@@ -27,7 +31,7 @@ router.get('/', function (req, res, next) {
     
     FROM tbinputdata, tbmesin, tbmaterial
     
-    WHERE tbinputdata.ID_Mesin=tbmesin.ID_Mesin AND tbinputdata.ID_Lot=tbmaterial.ID_Lot AND Jenis_Mesin="Speed Frame" AND (Tanggal BETWEEN '2018-03-01' AND '2018-03-31')
+    WHERE tbinputdata.ID_Mesin=tbmesin.ID_Mesin AND tbinputdata.ID_Lot=tbmaterial.ID_Lot AND Jenis_Mesin="`+machineType+`" AND (Tanggal BETWEEN '`+firstDate+`' AND '`+lastDate+`')
     
     ORDER BY ID_Mesin ASC, Tanggal ASC;`, function (error, results, fields) {
             if (error) {
