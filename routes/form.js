@@ -15,25 +15,23 @@ router.get('/', function (req, res, next) {
     const lastDate = req.query.lastDate;
     const machineType = req.query.machineType;
     connection.query(`SELECT
-    tbinputdata.Tanggal, tbinputdata.ID_Mesin,
-    tbmesin.Jenis_Mesin, tbmesin.Nomor_Mesin,
-    tbmaterial.Nama_Material, tbmaterial.NE,
-    tbmesin.Ideal_CT, tbmesin.Delivery,
-    tbinputdata.ID_Lot, tbinputdata.Planned_Stop, tbinputdata.Unplanned_Stop, tbinputdata.Processed_Amount, tbinputdata.Defect_Amount,
+
+    Tanggal,
+    Jenis_Mesin,
     
-    (1440-Planned_Stop) AS Loading_Time,
-    ((1440-Planned_Stop)-Unplanned_Stop) AS Operation_Time,
+    ROUND(AVG(AvailabilityRate),4) AS Mean_AvailabilityRate,
+    ROUND(AVG(PerformanceRate),4) AS Mean_PerformanceRate,
+    ROUND(AVG(QualityRate),4) AS Mean_QualityRate,
+    ROUND(AVG(OEERate),4) AS Mean_OEERate
     
-    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)),4)) AS AvailabilityRate,
-    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND(((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)),4)) AS PerformanceRate,
-    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND(((Processed_Amount-Defect_Amount)/Processed_Amount),4)) AS QualityRate,
-    IF (((1440-Planned_Stop)-Unplanned_Stop)='0', '0', ROUND(((((1440-Planned_Stop)-Unplanned_Stop)/(1440-Planned_Stop)) * ((Processed_Amount*1000*1.693*NE)/(Ideal_CT*((1440-Planned_Stop)-Unplanned_Stop)*Delivery)) * ((Processed_Amount-Defect_Amount)/Processed_Amount)),4)) AS OEERate
+    FROM tboee
     
-    FROM tbinputdata, tbmesin, tbmaterial
+    WHERE
+    Jenis_Mesin="`+machineType+`" AND (Tanggal BETWEEN '`+firstDate+`' AND '`+lastDate+`')
     
-    WHERE tbinputdata.ID_Mesin=tbmesin.ID_Mesin AND tbinputdata.ID_Lot=tbmaterial.ID_Lot AND Jenis_Mesin="`+machineType+`" AND (Tanggal BETWEEN '`+firstDate+`' AND '`+lastDate+`')
+    GROUP BY Tanggal
     
-    ORDER BY ID_Mesin ASC, Tanggal ASC;`, function (error, results, fields) {
+    ORDER BY Tanggal ASC;`, function (error, results, fields) {
             if (error) {
                 res.send({
                     success: false,
