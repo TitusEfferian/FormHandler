@@ -14,6 +14,7 @@ router.get('/', function (req, res, next) {
     const firstDate = req.query.firstDate;
     const lastDate = req.query.lastDate;
     const machineType = req.query.machineType;
+    console.log('firstDate:'+firstDate+', lastDate:'+lastDate)
     connection.query(`SELECT
 
     Tanggal,
